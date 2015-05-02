@@ -1,0 +1,43 @@
+head
+    title Smash Tournament Thumbnail Generator
+
+body
+    .container
+        .navbar.navbar-default.navbar-static-top(role='navigation')
+            .container-fluid
+                .navbar-brand(href="/") Smash Tournament Thumbnail Generator
+        canvas#myCanvas(width='800', height='600', style='border:1px solid #000000;')
+            | Your browser does not support the HTML5 canvas tag.
+        .col-md-4
+            .input-group
+                input.form-control.player1-name(type='text', value='P1 Name', aria-describedby='player1_name', maxlength='20')
+            select.form-control.player1-character
+                each characters
+                    option(value=id) {{ name }}
+        .col-md-4
+        .col-md-4
+            .input-group
+                input.form-control.player2-name(type='text', value='P2 Name', aria-describedby='player2_name', maxlength='20')
+            select.form-control.player2-character
+                each characters
+                    option(value=id) {{ name }}
+        //.input-group
+        //    input.form-control(type='text', placeholder="Recipient's username", aria-describedby='basic-addon2')
+        //    span#basic-addon2.input-group-addon @example.com
+        //.input-group
+        //    span.input-group-addon $
+        //    input.form-control(type='text', aria-label='Amount (to the nearest dollar)')
+        //    span.input-group-addon .00
+
+        //div.input
+        //    form.new-email
+        //        input(type='text', name='text', placeholder='Type to add new email titles')
+        //ul
+        //    each emails
+        //        +email
+
+//template(name='email')
+//    li(class="{{#if checked}} checked {{/if}}")
+//        input.toggle-checked(type='checkbox', checked=checked)
+//        span.text= text
+//        button.delete &times;
