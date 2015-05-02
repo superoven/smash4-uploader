@@ -1,2 +1,2 @@
-# YAEC - Yet Another Email Client
-This is a toy project to explore the meteor framework. It's a basic email client that works on web, android and ios.
+# Smash 4 - Video Uploader
+Uploads videos to your youtube channel with the backgrounds and overlays that you want. Made for smash 4.
