@@ -15,3 +15,13 @@ fastclick
 mrt:external-file-loader
 jquery
 twbs:bootstrap
+meteorhacks:npm
+
+
+npm-container
+nimble:restivus
+iron:router
+accounts-base
+accounts-google
+accounts-facebook
+service-configuration
