@@ -39,6 +39,7 @@ function render(player1_img, player1_name, player2_img, player2_name) {
         ctx.translate(800, 0);
         ctx.scale(-1, 1);
         ctx.fillText(player2_name, 550, 50);
+        console.log(c.toDataURL());
     });
 }
 
@@ -52,7 +53,6 @@ if (Meteor.isClient) {
     Template.Home.rendered = function () {
         if (!this._rendered) {
             this._rendered = true;
-            Meteor.call("upload");
             render($(".player1-character").val(), $(".player1-name").val(), $(".player2-character").val(), $(".player2-name").val());
         }
     };

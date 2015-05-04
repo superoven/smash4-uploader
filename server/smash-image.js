@@ -54,8 +54,9 @@ Meteor.methods({
         ru.on('success', Meteor.bindEnvironment(function (success) {
             console.log("GOT SUCCESS");
             console.log(success);
-            UploadProgress.update({ uploadId: prog.uploadId }, { $set: { progress: 100 }});
+            UploadProgress.update({ uploadId: success.uploadId }, { $set: { progress: 100 }});
         }, function (error) { console.log(error); }));
+
         ru.on('error', function(err) {
             console.log("GOT ERROR");
             console.log(err);
