@@ -42,18 +42,21 @@ function render(player1_img, player1_name, player2_img, player2_name) {
     });
 }
 
-Template.Home.helpers({
-    characters: function () {
-        return SmashCharacters;
-    }
-});
+if (Meteor.isClient) {
+    Template.Home.helpers({
+        characters: function () {
+            return SmashCharacters;
+        }
+    });
 
-Template.Home.rendered = function() {
-    if(!this._rendered) {
-        this._rendered = true;
-        render($(".player1-character").val(), $(".player1-name").val(), $(".player2-character").val(), $(".player2-name").val());
-    }
-};
+    Template.Home.rendered = function () {
+        if (!this._rendered) {
+            this._rendered = true;
+            Meteor.call("upload");
+            render($(".player1-character").val(), $(".player1-name").val(), $(".player2-character").val(), $(".player2-name").val());
+        }
+    };
+}
 
 Template.Home.events({
     "change .player1-character": function (event) {
@@ -73,6 +76,6 @@ Template.Home.events({
         return false;
     },
     "click .bruh": function (event) {
-        Meteor.call("doYoutube");
+        Meteor.call("upload");
     }
 });

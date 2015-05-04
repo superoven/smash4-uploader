@@ -25,4 +25,28 @@ template(name='Home')
                     option(value=id) {{ name }}
 
 template(name='Upload')
-    h1 You did it
+    .container
+        .navbar.navbar-default.navbar-static-top(role='navigation')
+            .container-fluid
+                .navbar-brand(href="/") Video Uploading
+                .navbar-right.login {{> loginButtons}}
+        each uploadProgresses
+            p {{title}}
+            .progress
+                .progress-bar.active.progress-bar-striped(role='progressbar', aria-valuenow='{{progress}}', aria-valuemin='0', aria-valuemax='100', style='min-width: 2em; width: {{progress}}%;') {{progress}}%
+        //button.bruh Press for Youtube
+        //canvas#thumbnail(width='800', height='600', style='border:1px solid #000000;')
+        //    | Your browser does not support the HTML5 canvas tag.
+        //.col-md-4
+        //    .input-group
+        //        input.form-control.player1-name(type='text', value='P1 Name', aria-describedby='player1_name', maxlength='20')
+        //    select.form-control.player1-character
+        //        each characters
+        //            option(value=id) {{ name }}
+        //.col-md-4
+        //.col-md-4
+        //    .input-group
+        //        input.form-control.player2-name(type='text', value='P2 Name', aria-describedby='player2_name', maxlength='20')
+        //    select.form-control.player2-character
+        //        each characters
+        //            option(value=id) {{ name }}

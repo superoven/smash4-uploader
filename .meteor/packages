@@ -23,5 +23,4 @@ nimble:restivus
 iron:router
 accounts-base
 accounts-google
-accounts-facebook
 service-configuration
