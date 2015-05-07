@@ -21,6 +21,7 @@ function make_char_url(char_id) {
 }
 
 function render(player1_img, player1_name, player2_img, player2_name) {
+    //TODO: finish flipping mechanism
     images = {
         'bg': '/img/bg.png',
         'player1': make_char_url(player1_img),
@@ -39,7 +40,6 @@ function render(player1_img, player1_name, player2_img, player2_name) {
         ctx.translate(800, 0);
         ctx.scale(-1, 1);
         ctx.fillText(player2_name, 550, 50);
-        console.log(c.toDataURL());
     });
 }
 
@@ -76,6 +76,7 @@ Template.Home.events({
         return false;
     },
     "click .bruh": function (event) {
-        Meteor.call("upload");
+        var c = $("#thumbnail")[0];
+        Meteor.call("thumbnailUpload", c.toDataURL());
     }
 });

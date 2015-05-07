@@ -31,7 +31,7 @@ Meteor.methods({
         var ru = new resumableUpload();
         ru.uploadId = uploadId;
         ru.tokens = tokens;
-        ru.filepath = '/home/taylor/git/smash-image/deardango.mp4';
+        ru.filepath = '/home/taylor/git/smash4up/deardango.mp4';
         ru.metadata = metadata;
         ru.monitor = true;
         ru.retry = 3;
@@ -55,6 +55,40 @@ Meteor.methods({
             console.log("GOT SUCCESS");
             console.log(success);
             UploadProgress.update({ uploadId: success.uploadId }, { $set: { progress: 100 }});
+        }, function (error) { console.log(error); }));
+
+        ru.on('error', function(err) {
+            console.log("GOT ERROR");
+            console.log(err);
+        });
+    },
+    thumbnailUpload: function (image_data) {
+        if (! Meteor.userId()) { throw new Meteor.Error("not-authorized"); }
+        var metadata = {};
+        var uuid = Meteor.npmRequire('uuid');
+        var uploadId = uuid.v1();
+
+        tokens = { access_token: Meteor.user().services.google.accessToken };
+        //var ResumableUpload = Meteor.npmRequire('node-youtube-resumable-upload');
+        var ru = new resumableUpload();
+        ru.is_thumbnail = true;
+        ru.videoId = 'E9QGgOqMBGo';
+        ru.uploadId = uploadId;
+        ru.tokens = tokens;
+        ru.image_data = image_data;
+        ru.metadata = metadata;
+        ru.monitor = true;
+
+        ru.initUpload();
+
+        ru.on('progress', Meteor.bindEnvironment(function (prog) {
+            console.log("GOT PROGRESS");
+            console.log(prog);
+        }, function(error) { console.log(error); }));
+
+        ru.on('success', Meteor.bindEnvironment(function (success) {
+            console.log("GOT SUCCESS");
+            console.log(success);
         }, function (error) { console.log(error); }));
 
         ru.on('error', function(err) {
