@@ -12,14 +12,14 @@ template(name='Home')
             | Your browser does not support the HTML5 canvas tag.
         .col-md-4
             .input-group
-                input.form-control.player1-name(type='text', value='P1 Name', aria-describedby='player1_name', maxlength='20')
+                input.form-control.player1-name(type='text', value='P1 Name', aria-describedby='player1_name', maxlength='18')
             select.form-control.player1-character
                 each characters
                     option(value=id) {{ name }}
         .col-md-4
         .col-md-4
             .input-group
-                input.form-control.player2-name(type='text', value='P2 Name', aria-describedby='player2_name', maxlength='20')
+                input.form-control.player2-name(type='text', value='P2 Name', aria-describedby='player2_name', maxlength='18')
             select.form-control.player2-character
                 each characters
                     option(value=id) {{ name }}

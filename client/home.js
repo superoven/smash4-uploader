@@ -57,14 +57,22 @@ function render(player1_id, player1_name, player2_id, player2_name) {
         }
     }
     loadImages(images, function (res) {
+        var text_y_axis = 150;
+        var width_of_text_box = 360;
         var c = $("#thumbnail")[0];
         var ctx = c.getContext("2d");
-        ctx.font = "30px Arial";
+        ctx.font = "Bolder 74px Impact";
+        ctx.fillStyle = "#ffffff";
+        ctx.strokeStyle = "#000000";
         ctx.drawImage(res.bg, 0, 0);
         character_render(ctx, res.player1, 1);
-        ctx.fillText(player1_name, 100, 50);
+        ctx.textAlign="start";
+        ctx.fillText(player1_name, 0, text_y_axis, width_of_text_box);
+        ctx.strokeText(player1_name, 0, text_y_axis, width_of_text_box);
         character_render(ctx, res.player2, 2);
-        ctx.fillText(player2_name, 550, 50);
+        ctx.textAlign="end";
+        ctx.fillText(player2_name, 800, text_y_axis, width_of_text_box);
+        ctx.strokeText(player2_name, 800, text_y_axis, width_of_text_box);
     });
 }
 
