@@ -16,6 +16,9 @@ template(name='Home')
             select.form-control.player1-character
                 each characters
                     option(value=id) {{ name }}
+            select.form-control.match-type
+                each match_types
+                    option(value=name) {{ name }}
         .col-md-4
         .col-md-4
             .input-group
@@ -23,6 +26,10 @@ template(name='Home')
             select.form-control.player2-character
                 each characters
                     option(value=id) {{ name }}
+            .input-group.datetimepicker
+                input.set-due-date.form-control.tournament-date(type='text')
+                span.input-group-addon
+                    span.glyphicon.glyphicon-calendar
 
 template(name='Upload')
     .container
