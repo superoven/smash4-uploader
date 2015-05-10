@@ -24,7 +24,8 @@ function render(player1_id, player1_name, player2_id, player2_name, match_type, 
     images = {
         'bg': '/img/bg.png',
         'player1': make_char_url(player1_id),
-        'player2': make_char_url(player2_id)
+        'player2': make_char_url(player2_id),
+        'overlay': '/img/overlay.png'
     };
     function character_render(ctx, character, player_slot_num) {
         var is_player1 = (player_slot_num == 1);
@@ -57,7 +58,7 @@ function render(player1_id, player1_name, player2_id, player2_name, match_type, 
         }
     }
     loadImages(images, function (res) {
-        var top_text_y_axis = 150;
+        var top_text_y_axis = 140;
         var bottom_text_y_axis = 515;
         var width_of_text_box = 360;
         var c = $("#thumbnail")[0];
@@ -68,18 +69,20 @@ function render(player1_id, player1_name, player2_id, player2_name, match_type, 
         character_render(ctx, res.player1, 1);
         character_render(ctx, res.player2, 2);
 
-        ctx.font = "Bolder 74px Impact";
+        ctx.drawImage(res.overlay, 0, 0);
+
         ctx.fillStyle = "#ffffff";
         ctx.strokeStyle = "#000000";
         ctx.textAlign="start";
+        ctx.font = "normal bolder 74px sans-serif";
         ctx.fillText(player1_name, 0, top_text_y_axis, width_of_text_box);
         ctx.strokeText(player1_name, 0, top_text_y_axis, width_of_text_box);
         ctx.textAlign="end";
         ctx.fillText(player2_name, 800, top_text_y_axis, width_of_text_box);
         ctx.strokeText(player2_name, 800, top_text_y_axis, width_of_text_box);
 
-        ctx.font = "Bolder 40px Impact";
         ctx.textAlign="start";
+        ctx.font = "normal bolder 40px sans-serif";
         ctx.fillText(match_type, 0, bottom_text_y_axis, width_of_text_box);
         ctx.strokeText(match_type, 0, bottom_text_y_axis, width_of_text_box);
         ctx.textAlign="end";
@@ -89,7 +92,7 @@ function render(player1_id, player1_name, player2_id, player2_name, match_type, 
 }
 
 function doRender() {
-    render($(".player1-character").val(), $(".player1-name").val(), $(".player2-character").val(), $(".player2-name").val(), $(".match-type").val(), $('input.tournament-date').val());
+    render($(".player1-character").val(), $(".player1-name").val(), $(".player2-character").val(), $(".player2-name").val(), $(".match-type").val(), $('.tournament-date').val());
 }
 
 function reRender(event) {
@@ -113,6 +116,7 @@ if (Meteor.isClient) {
             this.$('.datetimepicker').datetimepicker({
                 format: 'MM/DD/YYYY'
             });
+            this.$(".datetimepicker").on("dp.change", function (e) { doRender(); });
             doRender();
         }
     };
