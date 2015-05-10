@@ -19,6 +19,8 @@ template(name='Home')
             select.form-control.match-type
                 each match_types
                     option(value=name) {{ name }}
+            input-group
+                input.form-control.tournament-name(type='text', value='Tournament Name', aria-describedby='player1_name', maxlength='20')
         .col-md-4
         .col-md-4
             .input-group

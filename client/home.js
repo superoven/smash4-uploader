@@ -20,7 +20,7 @@ function make_char_url(char_id) {
     return (char_id.length > 0) ? '/img/portraits/' + char_id + '_01.png' : '/img/portraits/omakase_01.png';
 }
 
-function render(player1_id, player1_name, player2_id, player2_name, match_type, tournament_date) {
+function render(player1_id, player1_name, player2_id, player2_name, match_type, tournament_name, tournament_date) {
     images = {
         'bg': '/img/bg.png',
         'player1': make_char_url(player1_id),
@@ -59,8 +59,11 @@ function render(player1_id, player1_name, player2_id, player2_name, match_type, 
     }
     loadImages(images, function (res) {
         var top_text_y_axis = 140;
+        var tournament_text_box_y_axis = 475;
         var bottom_text_y_axis = 515;
         var width_of_text_box = 360;
+        var width_of_tournament_text_box = 400;
+
         var c = $("#thumbnail")[0];
         var ctx = c.getContext("2d");
 
@@ -88,11 +91,15 @@ function render(player1_id, player1_name, player2_id, player2_name, match_type, 
         ctx.textAlign="end";
         ctx.fillText(tournament_date, 800, bottom_text_y_axis, width_of_text_box);
         ctx.strokeText(tournament_date, 800, bottom_text_y_axis, width_of_text_box);
+        ctx.textAlign="center";
+        ctx.font = "normal bolder 80px sans-serif";
+        ctx.fillText(tournament_name, 400, tournament_text_box_y_axis, width_of_tournament_text_box);
+        ctx.strokeText(tournament_name, 400, tournament_text_box_y_axis, width_of_tournament_text_box);
     });
 }
 
 function doRender() {
-    render($(".player1-character").val(), $(".player1-name").val(), $(".player2-character").val(), $(".player2-name").val(), $(".match-type").val(), $('.tournament-date').val());
+    render($(".player1-character").val(), $(".player1-name").val(), $(".player2-character").val(), $(".player2-name").val(), $(".match-type").val(), $(".tournament-name").val(), $('.tournament-date').val());
 }
 
 function reRender(event) {
@@ -128,6 +135,7 @@ Template.Home.events({
     "change .player1-name": reRender,
     "change .player2-name": reRender,
     "change .match-type": reRender,
+    "change .tournament-name": reRender,
     "click .bruh": function (event) {
         var c = $("#thumbnail")[0];
         Meteor.call("thumbnailUpload", 'E9QGgOqMBGo', c.toDataURL());
