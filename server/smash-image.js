@@ -15,21 +15,19 @@ Meteor.methods({
             "maxResults": 50
         }, console.log);
     },
-    showUploads: function () {
-        console.log(UploadProgress.find({}));
-    },
     upload: function () {
         if (! Meteor.userId()) { throw new Meteor.Error("not-authorized"); }
         UploadProgress.remove({});
+        var uploadId = uuid.v1();
         var metadata = {
             snippet: { title: 'New Upload', description: 'Uploaded with ResumableUpload' },
             status: { privacyStatus: 'private' }
         };
 
         var ru = new resumableUpload();
-        ru.uploadId = uuid.v1();
+        ru.uploadId = uploadId;
         ru.tokens = { access_token: Meteor.user().services.google.accessToken };
-        ru.filepath = '/home/taylor/git/smash4up/deardango.mp4';
+        ru.video_data = Videos.findOne({});
         ru.metadata = metadata;
         ru.monitor = true;
         ru.retry = 3;
@@ -106,6 +104,9 @@ Meteor.methods({
             createdAt: new Date(),
             progress: 100
         });
+    },
+    showVideos: function () {
+       console.log(Videos.findOne({}).original.type);
     }
 });
 

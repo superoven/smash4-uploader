@@ -59,7 +59,7 @@ function render(player1_id, player1_name, player2_id, player2_name, match_type, 
     }
     loadImages(images, function (res) {
         var top_text_y_axis = 140;
-        var tournament_text_box_y_axis = 475;
+        var tournament_text_box_y_axis = 466;
         var bottom_text_y_axis = 515;
         var width_of_text_box = 360;
         var width_of_tournament_text_box = 400;
@@ -92,7 +92,7 @@ function render(player1_id, player1_name, player2_id, player2_name, match_type, 
         ctx.fillText(tournament_date, 800, bottom_text_y_axis, width_of_text_box);
         ctx.strokeText(tournament_date, 800, bottom_text_y_axis, width_of_text_box);
         ctx.textAlign="center";
-        ctx.font = "normal bolder 80px sans-serif";
+        ctx.font = "normal bolder 64px sans-serif";
         ctx.fillText(tournament_name, 400, tournament_text_box_y_axis, width_of_tournament_text_box);
         ctx.strokeText(tournament_name, 400, tournament_text_box_y_axis, width_of_tournament_text_box);
     });
@@ -138,6 +138,18 @@ Template.Home.events({
     "change .tournament-name": reRender,
     "click .bruh": function (event) {
         var c = $("#thumbnail")[0];
-        Meteor.call("thumbnailUpload", 'E9QGgOqMBGo', c.toDataURL());
+        //console.log($(".video-file"));
+        //Meteor.call("thumbnailUpload", 'E9QGgOqMBGo', c.toDataURL());
+        Meteor.call("upload");
+        //Meteor.call("showVideos");
+    },
+    'change .video-file': function(event, template) {
+        FS.Utility.eachFile(event, function(file) {
+            Videos.insert(file, function (err, fileObj) {
+                if (err) {
+                    console.log(err);
+                }
+            });
+        });
     }
 });
