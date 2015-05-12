@@ -76,23 +76,25 @@ function render(player1_id, player1_name, player2_id, player2_name, match_type, 
 
         ctx.fillStyle = "#ffffff";
         ctx.strokeStyle = "#000000";
-        ctx.textAlign="start";
-        ctx.font = "normal bolder 74px sans-serif";
-        ctx.fillText(player1_name, 0, top_text_y_axis, width_of_text_box);
-        ctx.strokeText(player1_name, 0, top_text_y_axis, width_of_text_box);
-        ctx.textAlign="end";
-        ctx.fillText(player2_name, 800, top_text_y_axis, width_of_text_box);
-        ctx.strokeText(player2_name, 800, top_text_y_axis, width_of_text_box);
 
-        ctx.textAlign="start";
+        ctx.font = "normal bolder 74px sans-serif";
+        ctx.textAlign="center";
+        ctx.fillText(player1_name, 200, top_text_y_axis, width_of_text_box);
+        ctx.strokeText(player1_name, 200, top_text_y_axis, width_of_text_box);
+        ctx.textAlign="center";
+        ctx.fillText(player2_name, 600, top_text_y_axis, width_of_text_box);
+        ctx.strokeText(player2_name, 600, top_text_y_axis, width_of_text_box);
+
         ctx.font = "normal bolder 40px sans-serif";
+        ctx.textAlign="start";
         ctx.fillText(match_type, 0, bottom_text_y_axis, width_of_text_box);
         ctx.strokeText(match_type, 0, bottom_text_y_axis, width_of_text_box);
         ctx.textAlign="end";
         ctx.fillText(tournament_date, 800, bottom_text_y_axis, width_of_text_box);
         ctx.strokeText(tournament_date, 800, bottom_text_y_axis, width_of_text_box);
-        ctx.textAlign="center";
+
         ctx.font = "normal bolder 64px sans-serif";
+        ctx.textAlign="center";
         ctx.fillText(tournament_name, 400, tournament_text_box_y_axis, width_of_tournament_text_box);
         ctx.strokeText(tournament_name, 400, tournament_text_box_y_axis, width_of_tournament_text_box);
     });
@@ -139,17 +141,34 @@ Template.Home.events({
     "click .bruh": function (event) {
         var c = $("#thumbnail")[0];
         //console.log($(".video-file"));
-        //Meteor.call("thumbnailUpload", 'E9QGgOqMBGo', c.toDataURL());
-        Meteor.call("upload");
+        Meteor.call("thumbnailUpload", 'E9QGgOqMBGo', c.toDataURL());
+        //Meteor.call("upload");
         //Meteor.call("showVideos");
     },
     'change .video-file': function(event, template) {
-        FS.Utility.eachFile(event, function(file) {
-            Videos.insert(file, function (err, fileObj) {
-                if (err) {
-                    console.log(err);
-                }
-            });
+        FS.Utility.eachFile(event, function (file) {
+            var reader = new FileReader(); //create a reader according to HTML5 File API
+            var c = $("#thumbnail")[0];
+
+            reader.onload = function (event) {
+                var buffer = new Uint8Array(reader.result); // convert to binary
+                Meteor.call('upload', buffer, file.type, file.size, c.toDataURL());
+            };
+
+            reader.readAsArrayBuffer(file); //read the file as arraybuffer
+
+            //var xhr = new XMLHttpRequest();
+            //xhr.open('POST', '/videoUpload', true);
+            //xhr.onload = function(event){
+            //    console.log(event);
+            //};
+            //
+            //xhr.send(file);
+            //Videos.insert(file, function (err, fileObj) {
+            //    if (err) {
+            //        console.log(err);
+            //    }
+            //});
         });
     }
 });

@@ -15,19 +15,21 @@ Meteor.methods({
             "maxResults": 50
         }, console.log);
     },
-    upload: function () {
+    upload: function (video_buffer, content_type, size, image_data) {
         if (! Meteor.userId()) { throw new Meteor.Error("not-authorized"); }
         UploadProgress.remove({});
         var uploadId = uuid.v1();
         var metadata = {
-            snippet: { title: 'New Upload', description: 'Uploaded with ResumableUpload' },
+            snippet: { title: 'New Upload - Shrek?', description: 'Uploaded with ResumableUpload' },
             status: { privacyStatus: 'private' }
         };
 
         var ru = new resumableUpload();
         ru.uploadId = uploadId;
+        ru.content_type = content_type;
+        ru.filesize = size;
         ru.tokens = { access_token: Meteor.user().services.google.accessToken };
-        ru.video_data = Videos.findOne({});
+        ru.video_data = video_buffer;
         ru.metadata = metadata;
         ru.monitor = true;
         ru.retry = 3;
@@ -50,6 +52,8 @@ Meteor.methods({
         ru.on('success', Meteor.bindEnvironment(function (success) {
             console.log("GOT SUCCESS");
             console.log(success);
+            console.log(JSON.parse(success.body)['id']);
+            Meteor.call("thumbnailUpload", JSON.parse(success.body)['id'], image_data);
             UploadProgress.update({ uploadId: success.uploadId }, { $set: { progress: 100 }});
         }, function (error) { console.log(error); }));
 
@@ -57,6 +61,7 @@ Meteor.methods({
             console.log("GOT ERROR");
             console.log(err);
         });
+
     },
     thumbnailUpload: function (video_id, image_data) {
         if (! Meteor.userId()) { throw new Meteor.Error("not-authorized"); }
@@ -109,5 +114,32 @@ Meteor.methods({
        console.log(Videos.findOne({}).original.type);
     }
 });
+
+var db = MongoInternals.defaultRemoteCollectionDriver().mongo.db;
+var GridStore = Meteor.npmRequire('mongodb').GridStore;
+
+//Router.route('/videoUpload', function(req, res) {
+WebApp.connectHandlers.use('/videoUpload', Meteor.bindEnvironment(function (req, res) {
+    console.log("FUCK");
+    Meteor.call("thumbnailUpload", Meteor.bindEnvironment(function (err, ret) {
+        console.log(err);
+        console.log(ret);
+    }, function (err) {}));
+    //var file = new GridStore(db,'filename','w').stream(true); //start the stream
+    //
+    //file.on('error',function(e){ console.log("ERROR: " + e)});
+    //file.on('end',function () { res.end(); });
+    //var file = new FS.File(req);
+    //console.log(req.headers);
+    //req.on('data', function (data) {
+    //    console.log(data.length);
+    //});
+    //req.on('end', function (err, data) {
+    //    console.log("end");
+    //});
+    //console.log(req.length);
+
+    //req.pipe(process.stdout);
+}), function (err) {});
 
 Meteor.startup(function () {});
