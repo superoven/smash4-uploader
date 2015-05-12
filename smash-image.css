@@ -139,3 +139,24 @@ div.input{
 .login{
     padding: 17px;
 }
+
+canvas#thumbnail {
+    width: 100%;
+}
+
+.tournament-params {
+  display: block;
+  margin-bottom: 30px;
+}
+
+.player1-input {
+    margin-bottom: 20px
+}
+
+.player2-input {
+    margin-bottom: 20px
+}
+
+.match-type {
+    margin-bottom: 20px
+}
