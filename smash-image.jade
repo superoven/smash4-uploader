@@ -1,5 +1,6 @@
 head
     title Smash Tournament Thumbnail Generator
+    script(src='https://cdnjs.cloudflare.com/ajax/libs/lodash.js/3.8.0/lodash.min.js')
 
 template(name='Home')
     .container
@@ -19,19 +20,19 @@ template(name='Home')
 
 template(name="TournamentVid")
     .col-md-8
-        canvas#thumbnail(width='800', height='600', style='border:1px solid #000000;')
+        canvas(id='thumbnail-{{_id}}',width='800', height='600', style='border:1px solid #000000;')
             | Your browser does not support the HTML5 canvas tag.
     .col-md-4
         .input-group.player1-input
             input.form-control.player1-name(type='text', value='{{p1_name}}', aria-describedby='player1_name', maxlength='20')
             select.form-control.player1-character
-                each characters
-                    option(value=id) {{ name }}
+                each characters p1_char
+                    option(value=id, selected='{{isSelected this}}') {{ name }}
         .input-group.player2-input
             input.form-control.player2-name(type='text', value='{{p2_name}}', aria-describedby='player2_name', maxlength='20')
             select.form-control.player2-character
-                each characters
-                    option(value=id) {{ name }}
+                each characters p2_char
+                    option(value=id, selected='{{isSelected this}}') {{ name }}
         select.form-control.match-type
             each match_types
                 option(value=name) {{ name }}

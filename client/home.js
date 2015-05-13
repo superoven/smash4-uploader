@@ -20,7 +20,7 @@ function make_char_url(char_id) {
     return (char_id.length > 0) ? '/img/portraits/' + char_id + '_01.png' : '/img/portraits/omakase_01.png';
 }
 
-function render(player1_id, player1_name, player2_id, player2_name, match_type, tournament_name, tournament_date) {
+function render(player1_id, player1_name, player2_id, player2_name, match_type, tournament_name, tournament_date, mongo_id) {
     images = {
         'bg': '/img/bg.png',
         'player1': make_char_url(player1_id),
@@ -64,7 +64,7 @@ function render(player1_id, player1_name, player2_id, player2_name, match_type, 
         var width_of_text_box = 360;
         var width_of_tournament_text_box = 400;
 
-        var c = $("#thumbnail")[0];
+        var c = $("#thumbnail-" + mongo_id)[0];
         var ctx = c.getContext("2d");
 
         ctx.drawImage(res.bg, 0, 0);
@@ -101,7 +101,8 @@ function render(player1_id, player1_name, player2_id, player2_name, match_type, 
 }
 
 function doRender(data) {
-    render(data.p1_char, data.p1_name, data.p2_char, data.p2_name, data.match_type, $(".tournament-name").val(), $('.tournament-date').val());
+    console.log(data);
+    render(data.p1_char, data.p1_name, data.p2_char, data.p2_name, data.match_type, $(".tournament-name").val(), "idk", data._id);
 }
 
 function reRender(event, instance, parameter) {
@@ -119,8 +120,17 @@ if (Meteor.isClient) {
     });
 
     Template.TournamentVid.helpers({
-        characters: function () {
-            return SmashCharacters;
+        orientations: function (selected_char) {
+            return PortraitOrientations;
+        },
+        characters: function (selected_char) {
+            if (!selected_char) return SmashCharacters;
+            var ret = _.cloneDeep(SmashCharacters);
+            var location = _.findIndex(ret, function(chr) { return chr.id == selected_char; });
+            var selected_result = ret[location];
+            selected_result['selected'] = true;
+            ret[location] = selected_result;
+            return ret;
         },
         match_types: function () {
             return MatchTypes;
@@ -151,24 +161,16 @@ if (Meteor.isClient) {
             //    userId: Meteor.userId()
             //});
             this.$(".datetimepicker").on("dp.change", function (e) { doRender(); });
-
-            //TODO: Render initially for all Videos
-            console.log(TournamentVideo.find({}));
-
-            //var raceCursor = TournamentVideo.find({});
-            //var race;
-            //while ( raceCursor.hasNext() ) {
-            //    race = raceCursor.next();
-            //    console.log( race.p1_name );
-            //}
-
-            //TournamentVideo.find({}).forEach(function (obj) {
-            //    console.log(obj);
-            //});
-            //doRender();
         }
     };
 }
+
+Template.TournamentVid.rendered = function () {
+    if (!this._rendered) {
+        this._rendered = true;
+        TournamentVideo.find({}).forEach(function (a) { doRender(a); });
+    }
+};
 
 Template.TournamentVid.events({
     "change .player1-character": function(event, instance) {
@@ -208,7 +210,7 @@ Template.TournamentVid.events({
     'change .video-file': function(event, template) {
         FS.Utility.eachFile(event, function (file) {
             var reader = new FileReader();
-            var c = $("#thumbnail")[0];
+            var c = $("#thumbnail-" + template.data._id)[0];
             reader.onload = function (event) {
                 var buffer = new Uint8Array(reader.result);
                 Meteor.call('upload', buffer, file.type, file.size, c.toDataURL());
@@ -216,4 +218,24 @@ Template.TournamentVid.events({
             reader.readAsArrayBuffer(file);
         });
     }
+});
+
+Template.Home.events({
+    "change .tournament-name": function (event) {
+        TournamentVideo.find({}).forEach(function (a) {
+            console.log(a);
+            doRender(a);
+        });
+    }
+    //"change .tournament-date": function (event) {
+    //    console.log(TournamentVideo.find({}));
+    //    //TournamentVideo.find({}).forEach(function (a) {
+    //    //    console.log(a);
+    //    //    doRender(a);
+    //    //});
+    //}
+});
+
+UI.registerHelper('isSelected', function(context, options) {
+    return context && context.selected;
 });
