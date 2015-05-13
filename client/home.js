@@ -104,8 +104,25 @@ function doRender() {
     render($(".player1-character").val(), $(".player1-name").val(), $(".player2-character").val(), $(".player2-name").val(), $(".match-type").val(), $(".tournament-name").val(), $('.tournament-date').val());
 }
 
+String.prototype.format = function() {
+    var content = this;
+    for (var i=0; i < arguments.length; i++) {
+        var replacement = '{' + i + '}';
+        content = content.replace(replacement, arguments[i]);
+    }
+    return content;
+};
+
 function reRender(event) {
     doRender();
+    var title = "{0} - {1}: {2} ({3}) vs. {4} ({5})".format(
+        $(".tournament-name").val(),
+        $(".match-type").val(),
+        $(".player1-name").val(),
+        CharacterDict[$(".player1-character").val()],
+        $(".player2-name").val(),
+        CharacterDict[$(".player2-character").val()]);
+    $(".video-title").val(title);
     return false;
 }
 
@@ -129,7 +146,23 @@ if (Meteor.isClient) {
             doRender();
         }
     };
+
+    //Deps.autorun(function () {
+    //    if (Meteor.userId()) {
+    //        doRender();
+    //    }
+    //});
 }
+//
+//Meteor.loginWithGoogle({
+//    requestPermissions: ['email']
+//}, function(error) {
+//    if (error) {
+//        console.log(error); //If there is any error, will get error here
+//    }else{
+//        console.log("You logged in just now!");// If there is successful login, you will get login details here
+//    }
+//});
 
 Template.Home.events({
     "change .player1-character": reRender,
@@ -138,37 +171,24 @@ Template.Home.events({
     "change .player2-name": reRender,
     "change .match-type": reRender,
     "change .tournament-name": reRender,
-    "click .bruh": function (event) {
-        var c = $("#thumbnail")[0];
-        //console.log($(".video-file"));
-        Meteor.call("thumbnailUpload", 'E9QGgOqMBGo', c.toDataURL());
-        //Meteor.call("upload");
-        //Meteor.call("showVideos");
-    },
+    //"click .bruh": function (event) {
+    //    var c = $("#thumbnail")[0];
+    //    //console.log($(".video-file"));
+    //    Meteor.call("thumbnailUpload", 'E9QGgOqMBGo', c.toDataURL());
+    //    //Meteor.call("upload");
+    //    //Meteor.call("showVideos");
+    //},
     'change .video-file': function(event, template) {
         FS.Utility.eachFile(event, function (file) {
-            var reader = new FileReader(); //create a reader according to HTML5 File API
+            var reader = new FileReader();
             var c = $("#thumbnail")[0];
 
             reader.onload = function (event) {
-                var buffer = new Uint8Array(reader.result); // convert to binary
-                Meteor.call('upload', buffer, file.type, file.size, c.toDataURL());
+                var buffer = new Uint8Array(reader.result);
+                Meteor.call('upload', buffer, file.type, file.size, c.toDataURL(), $(".video-title").val(), "");
             };
 
-            reader.readAsArrayBuffer(file); //read the file as arraybuffer
-
-            //var xhr = new XMLHttpRequest();
-            //xhr.open('POST', '/videoUpload', true);
-            //xhr.onload = function(event){
-            //    console.log(event);
-            //};
-            //
-            //xhr.send(file);
-            //Videos.insert(file, function (err, fileObj) {
-            //    if (err) {
-            //        console.log(err);
-            //    }
-            //});
+            reader.readAsArrayBuffer(file)
         });
     }
 });

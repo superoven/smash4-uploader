@@ -139,3 +139,44 @@ div.input{
 .login{
     padding: 17px;
 }
+
+#thumbnail {
+    width: 100%;
+}
+
+.p1-group {
+    margin-bottom: 30px;
+}
+
+.p2-group {
+    margin-bottom: 30px;
+}
+
+.match-type {
+    margin-bottom: 30px;
+}
+
+.tournament-name {
+    margin-bottom: 30px;
+}
+
+.video-file {
+    margin-bottom: 30px;
+}
+
+.video-title {
+    margin-bottom: 30px;
+}
+
+.video-description {
+    margin-bottom: 30px;
+}
+
+h4.sign-in-notice {
+  margin-top: 30px;
+  margin-left: 15px;
+}
+
+input.form-control.tournament-name {
+  margin-bottom: 30px;
+}

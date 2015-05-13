@@ -1,5 +1,6 @@
 head
     title Smash Tournament Thumbnail Generator
+    //script(src='/js/dropzone.js')
 
 template(name='Home')
     .container
@@ -7,43 +8,55 @@ template(name='Home')
             .container-fluid
                 .navbar-brand(href="/") Smash Tournament Thumbnail Generator
                 .navbar-right.login {{> loginButtons}}
-        button.bruh Press for Youtube
-        canvas#thumbnail(width='800', height='600', style='border:1px solid #000000;')
-            | Your browser does not support the HTML5 canvas tag.
-        .col-md-4
-            .input-group
-                input.form-control.player1-name(type='text', value='P1 Name', aria-describedby='player1_name', maxlength='18')
-            select.form-control.player1-character
-                each characters
-                    option(value=id) {{ name }}
-            select.form-control.match-type
-                each match_types
-                    option(value=name) {{ name }}
-            .input-group
-                input.form-control.tournament-name(type='text', value='Tournament Name', aria-describedby='player1_name', maxlength='20')
-            input.video-file(type='file', name='fileInput')
-        .col-md-4
-        .col-md-4
-            .input-group
-                input.form-control.player2-name(type='text', value='P2 Name', aria-describedby='player2_name', maxlength='18')
-            select.form-control.player2-character
-                each characters
-                    option(value=id) {{ name }}
-            .input-group.datetimepicker
-                input.set-due-date.form-control.tournament-date(type='text')
-                span.input-group-addon
-                    span.glyphicon.glyphicon-calendar
+        if currentUser
+            form
+                .col-md-12
+                    b Title
+                    input.form-control.video-title(type='text', value='YOUTUBE VIDEO TITLE')
+                    b Description
+                    input.form-control.video-description(type='text', value='')
+                .col-md-8
+                    canvas#thumbnail(width='800', height='600', style='border:1px solid #000000;')
+                        | Your browser does not support the HTML5 canvas tag.
+                .col-md-4
+                    .input-group
+                        input.form-control.tournament-name(type='text', value='Tournament Name', aria-describedby='player1_name', maxlength='20')
+                    //.input-group.datetimepicker
+                    //    input.set-due-date.form-control.tournament-date(type='text', maxlength='10')
+                    //    span.input-group-addon
+                    //        span.glyphicon.glyphicon-calendar
+                    .input-group.p1-group
+                        input.form-control.player1-name(type='text', value='P1 Name', aria-describedby='player1_name', maxlength='20')
+                        select.form-control.player1-character
+                            each characters
+                                option(value=id) {{ name }}
+                    .input-group.p2-group
+                        input.form-control.player2-name(type='text', value='P2 Name', aria-describedby='player2_name', maxlength='20')
+                        select.form-control.player2-character
+                            each characters
+                                option(value=id) {{ name }}
+                    select.form-control.match-type
+                        each match_types
+                            option(value=name) {{ name }}
+                    //form#my-awesome-dropzone.dropzone(action='/file-upload')
+                    //button.btn.btn-primary.start
+                    //    i.glyphicon.glyphicon-upload
+                    //        span Upload to YouTube
+                    input.video-file(type='file', name='fileInput')
+                    p Upon selecting video, it will begin upload to YouTube
+        else
+            h4.sign-in-notice Sign in with your YouTube account to begin!
 
 template(name='Upload')
-    .container
-        .navbar.navbar-default.navbar-static-top(role='navigation')
-            .container-fluid
-                .navbar-brand(href="/") Video Uploading
-                .navbar-right.login {{> loginButtons}}
-        each uploadProgresses
-            p {{title}}
-            .progress
-                .progress-bar.active.progress-bar-striped(role='progressbar', aria-valuenow='{{progress}}', aria-valuemin='0', aria-valuemax='100', style='min-width: 2em; width: {{progress}}%;') {{progress}}%
+    //.container
+    //    .navbar.navbar-default.navbar-static-top(role='navigation')
+    //        .container-fluid
+    //            .navbar-brand(href="/") Video Uploading
+    //            .navbar-right.login {{> loginButtons}}
+    //    each uploadProgresses
+    p {{title}}
+        .progress
+            .progress-bar.active.progress-bar-striped(role='progressbar', aria-valuenow='{{progress}}', aria-valuemin='0', aria-valuemax='100', style='min-width: 2em; width: {{progress}}%;') {{progress}}%
         //button.bruh Press for Youtube
         //canvas#thumbnail(width='800', height='600', style='border:1px solid #000000;')
         //    | Your browser does not support the HTML5 canvas tag.

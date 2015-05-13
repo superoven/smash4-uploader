@@ -15,12 +15,12 @@ Meteor.methods({
             "maxResults": 50
         }, console.log);
     },
-    upload: function (video_buffer, content_type, size, image_data) {
+    upload: function (video_buffer, content_type, size, image_data, title, description) {
         if (! Meteor.userId()) { throw new Meteor.Error("not-authorized"); }
         UploadProgress.remove({});
         var uploadId = uuid.v1();
         var metadata = {
-            snippet: { title: 'New Upload - Shrek?', description: 'Uploaded with ResumableUpload' },
+            snippet: { title: title, description: description },
             status: { privacyStatus: 'private' }
         };
 
