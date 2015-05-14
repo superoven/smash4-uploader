@@ -21,7 +21,7 @@ Meteor.methods({
         var uploadId = uuid.v1();
         var metadata = {
             snippet: { title: title, description: "" },
-            status: { privacyStatus: 'private' }
+            status: { privacyStatus: 'public' }
         };
 
         console.log("UPLOADING...");
