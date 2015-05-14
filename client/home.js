@@ -157,29 +157,7 @@ Template.Home.events({
     "change .player1-name": reRender,
     "change .player2-name": reRender,
     "change .match-type": reRender,
-    "change .tournament-name": reRender,
-    "click .bruh": function (event) {
-        Meteor.call("getData");
-    }
-    //    var c = $("#thumbnail")[0];
-    //    //console.log($(".video-file"));
-    //    Meteor.call("thumbnailUpload", 'E9QGgOqMBGo', c.toDataURL());
-    //    //Meteor.call("upload");
-    //    //Meteor.call("showVideos");
-    //},
-    //'change .video-file': function(event, template) {
-    //    FS.Utility.eachFile(event, function (file) {
-    //        var reader = new FileReader();
-    //        var c = $("#thumbnail")[0];
-    //
-    //        reader.onload = function (event) {
-    //            var buffer = new Uint8Array(reader.result);
-    //            Meteor.call('upload', buffer, file.type, file.size, c.toDataURL(), $(".video-title").val(), "");
-    //        };
-    //
-    //        reader.readAsArrayBuffer(file)
-    //    });
-    //}
+    "change .tournament-name": reRender
 });
 
 Meteor.startup(function() {
