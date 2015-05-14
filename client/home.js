@@ -151,6 +151,7 @@ if (Meteor.isClient) {
     };
 }
 
+
 Template.Home.events({
     "change .player1-character": reRender,
     "change .player2-character": reRender,
