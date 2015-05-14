@@ -1,20 +1,6 @@
 var uuid = Meteor.npmRequire('uuid');
 
 Meteor.methods({
-    doYoutube: function () {
-        if (! Meteor.userId()) { throw new Meteor.Error("not-authorized"); }
-        var Youtube = Meteor.npmRequire("youtube-api");
-        Youtube.authenticate({
-            type: "oauth",
-            token: Meteor.user().services.google.accessToken
-        });
-        Youtube.videos.insert();
-        Youtube.channels.list({
-            "part": "id",
-            "mySubscribers": true,
-            "maxResults": 50
-        }, console.log);
-    },
     upload: function (video_link, content_type, size, title, image_data) {
         if (! Meteor.userId()) { throw new Meteor.Error("not-authorized"); }
         UploadProgress.remove({});
@@ -24,7 +10,6 @@ Meteor.methods({
             status: { privacyStatus: 'public' }
         };
 
-        console.log("UPLOADING...");
         var ru = new resumableUpload();
         ru.uploadId = uploadId;
         ru.content_type = content_type;
@@ -102,59 +87,8 @@ Meteor.methods({
             console.log("GOT ERROR");
             console.log(err);
         });
-    },
-    fakeUpload: function () {
-        UploadProgress.remove({});
-        UploadProgress.insert({
-            title: "COAB - SuperOven (Luigi) vs. bobeta (Luigi)",
-            createdAt: new Date(),
-            progress: 60
-        });
-        UploadProgress.insert({
-            title: "COAB - Crow (Peach) vs. JeepySol (Wario)",
-            createdAt: new Date(),
-            progress: 0
-        });
-        UploadProgress.insert({
-            title: "COAB - Sean (Diddy) vs. Arikie (Sonic)",
-            createdAt: new Date(),
-            progress: 100
-        });
-    },
-    showVideos: function () {
-       console.log(Videos.findOne({}).original.type);
-    },
-    getData: function () {
-        var request = Meteor.npmRequire('request');
     }
 });
-
-var db = MongoInternals.defaultRemoteCollectionDriver().mongo.db;
-var GridStore = Meteor.npmRequire('mongodb').GridStore;
-
-//Router.route('/videoUpload', function(req, res) {
-WebApp.connectHandlers.use('/videoUpload', Meteor.bindEnvironment(function (req, res) {
-    console.log("FUCK");
-    Meteor.call("thumbnailUpload", Meteor.bindEnvironment(function (err, ret) {
-        console.log(err);
-        console.log(ret);
-    }, function (err) {}));
-    //var file = new GridStore(db,'filename','w').stream(true); //start the stream
-    //
-    //file.on('error',function(e){ console.log("ERROR: " + e)});
-    //file.on('end',function () { res.end(); });
-    //var file = new FS.File(req);
-    //console.log(req.headers);
-    //req.on('data', function (data) {
-    //    console.log(data.length);
-    //});
-    //req.on('end', function (err, data) {
-    //    console.log("end");
-    //});
-    //console.log(req.length);
-
-    //req.pipe(process.stdout);
-}), function (err) {});
 
 Meteor.startup(function () {
     UploadServer.init({
