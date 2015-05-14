@@ -89,9 +89,9 @@ function render(player1_id, player1_name, player2_id, player2_name, match_type, 
         ctx.textAlign="start";
         ctx.fillText(match_type, 0, bottom_text_y_axis, width_of_text_box);
         ctx.strokeText(match_type, 0, bottom_text_y_axis, width_of_text_box);
-        ctx.textAlign="end";
-        ctx.fillText(tournament_date, 800, bottom_text_y_axis, width_of_text_box);
-        ctx.strokeText(tournament_date, 800, bottom_text_y_axis, width_of_text_box);
+        //ctx.textAlign="end";
+        //ctx.fillText(tournament_date, 800, bottom_text_y_axis, width_of_text_box);
+        //ctx.strokeText(tournament_date, 800, bottom_text_y_axis, width_of_text_box);
 
         ctx.font = "normal bolder 64px sans-serif";
         ctx.textAlign="center";
@@ -133,6 +133,9 @@ if (Meteor.isClient) {
         },
         match_types: function () {
             return MatchTypes;
+        },
+        uploads: function () {
+            return UploadProgress.find({});
         }
     });
 
@@ -146,23 +149,7 @@ if (Meteor.isClient) {
             doRender();
         }
     };
-
-    //Deps.autorun(function () {
-    //    if (Meteor.userId()) {
-    //        doRender();
-    //    }
-    //});
 }
-//
-//Meteor.loginWithGoogle({
-//    requestPermissions: ['email']
-//}, function(error) {
-//    if (error) {
-//        console.log(error); //If there is any error, will get error here
-//    }else{
-//        console.log("You logged in just now!");// If there is successful login, you will get login details here
-//    }
-//});
 
 Template.Home.events({
     "change .player1-character": reRender,
@@ -171,24 +158,34 @@ Template.Home.events({
     "change .player2-name": reRender,
     "change .match-type": reRender,
     "change .tournament-name": reRender,
-    //"click .bruh": function (event) {
+    "click .bruh": function (event) {
+        Meteor.call("getData");
+    }
     //    var c = $("#thumbnail")[0];
     //    //console.log($(".video-file"));
     //    Meteor.call("thumbnailUpload", 'E9QGgOqMBGo', c.toDataURL());
     //    //Meteor.call("upload");
     //    //Meteor.call("showVideos");
     //},
-    'change .video-file': function(event, template) {
-        FS.Utility.eachFile(event, function (file) {
-            var reader = new FileReader();
-            var c = $("#thumbnail")[0];
+    //'change .video-file': function(event, template) {
+    //    FS.Utility.eachFile(event, function (file) {
+    //        var reader = new FileReader();
+    //        var c = $("#thumbnail")[0];
+    //
+    //        reader.onload = function (event) {
+    //            var buffer = new Uint8Array(reader.result);
+    //            Meteor.call('upload', buffer, file.type, file.size, c.toDataURL(), $(".video-title").val(), "");
+    //        };
+    //
+    //        reader.readAsArrayBuffer(file)
+    //    });
+    //}
+});
 
-            reader.onload = function (event) {
-                var buffer = new Uint8Array(reader.result);
-                Meteor.call('upload', buffer, file.type, file.size, c.toDataURL(), $(".video-title").val(), "");
-            };
-
-            reader.readAsArrayBuffer(file)
-        });
+Meteor.startup(function() {
+    Uploader.uploadUrl = Meteor.absoluteUrl("upload");
+    Uploader.finished = function (index, fileInfo, templateContext) {
+        console.log("IT BEGINS");
+        Meteor.call("upload", fileInfo.url, fileInfo.type, fileInfo.size, $(".video-title").val(), $("#thumbnail")[0].toDataURL());
     }
 });

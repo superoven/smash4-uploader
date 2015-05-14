@@ -15,25 +15,28 @@ Meteor.methods({
             "maxResults": 50
         }, console.log);
     },
-    upload: function (video_buffer, content_type, size, image_data, title, description) {
+    upload: function (video_link, content_type, size, title, image_data) {
         if (! Meteor.userId()) { throw new Meteor.Error("not-authorized"); }
         UploadProgress.remove({});
         var uploadId = uuid.v1();
         var metadata = {
-            snippet: { title: title, description: description },
+            snippet: { title: title, description: "" },
             status: { privacyStatus: 'private' }
         };
 
+        console.log("UPLOADING...");
         var ru = new resumableUpload();
         ru.uploadId = uploadId;
         ru.content_type = content_type;
         ru.filesize = size;
         ru.tokens = { access_token: Meteor.user().services.google.accessToken };
-        ru.video_data = video_buffer;
+        ru.video_data = video_link;
         ru.metadata = metadata;
         ru.monitor = true;
         ru.retry = 3;
 
+
+        UploadProgress.remove({});
         UploadProgress.insert({
             uploadId: uploadId,
             title: metadata.snippet.title,
@@ -52,15 +55,23 @@ Meteor.methods({
         ru.on('success', Meteor.bindEnvironment(function (success) {
             console.log("GOT SUCCESS");
             console.log(success);
-            console.log(JSON.parse(success.body)['id']);
-            Meteor.call("thumbnailUpload", JSON.parse(success.body)['id'], image_data);
-            UploadProgress.update({ uploadId: success.uploadId }, { $set: { progress: 100 }});
+            var video_id = JSON.parse(success.body)['id'];
+            var link = "https://www.youtube.com/watch?v=" + video_id;
+            Meteor.call("thumbnailUpload", video_id, image_data);
+            UploadProgress.update({ uploadId: success.uploadId }, { $set: {
+                progress: 100,
+                message: link,
+                success: true
+            }});
         }, function (error) { console.log(error); }));
 
-        ru.on('error', function(err) {
+        ru.on('error', Meteor.bindEnvironment(function (err) {
             console.log("GOT ERROR");
+            if (err.error.message == "Invalid Credentials") {
+                UploadProgress.update({ uploadId: err.uploadId }, { $set: { message: "Error: Please log out and log back in" }});
+            }
             console.log(err);
-        });
+        }, function (error) { console.log(error); }));
 
     },
     thumbnailUpload: function (video_id, image_data) {
@@ -112,6 +123,9 @@ Meteor.methods({
     },
     showVideos: function () {
        console.log(Videos.findOne({}).original.type);
+    },
+    getData: function () {
+        var request = Meteor.npmRequire('request');
     }
 });
 
@@ -142,4 +156,10 @@ WebApp.connectHandlers.use('/videoUpload', Meteor.bindEnvironment(function (req,
     //req.pipe(process.stdout);
 }), function (err) {});
 
-Meteor.startup(function () {});
+Meteor.startup(function () {
+    UploadServer.init({
+        tmpDir: process.env.PWD + '/.uploads/tmp',
+        uploadDir: process.env.PWD + '/.uploads/',
+        checkCreateDirectories: true
+    });
+});

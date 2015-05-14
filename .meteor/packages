@@ -27,3 +27,5 @@ service-configuration
 tsega:bootstrap3-datetimepicker
 cfs:standard-packages
 cfs:gridfs
+tomi:upload-jquery
+tomi:upload-server

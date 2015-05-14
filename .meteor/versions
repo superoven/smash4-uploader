@@ -94,6 +94,8 @@ spacebars@1.0.5
 spacebars-compiler@1.0.4
 srp@1.0.2
 templating@1.0.11
+tomi:upload-jquery@2.1.5
+tomi:upload-server@1.2.3
 tracker@1.0.5
 tsega:bootstrap3-datetimepicker@4.7.14_4
 twbs:bootstrap@3.3.4
