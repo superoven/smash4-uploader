@@ -210,3 +210,7 @@ input.form-control.tournament-name {
 .progress {
     margin-top: 30px;
 }
+
+.upload-bar {
+    margin-bottom: 30px;
+}

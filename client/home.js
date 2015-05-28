@@ -21,6 +21,7 @@ function make_char_url(char_id) {
 }
 
 function render(player1_id, player1_name, player2_id, player2_name, match_type, tournament_name, tournament_date) {
+    console.log(player1_id);
     images = {
         'bg': '/img/bg.png',
         'player1': make_char_url(player1_id),
@@ -101,7 +102,23 @@ function render(player1_id, player1_name, player2_id, player2_name, match_type, 
 }
 
 function doRender() {
-    render($(".player1-character").val(), $(".player1-name").val(), $(".player2-character").val(), $(".player2-name").val(), $(".match-type").val(), $(".tournament-name").val(), $('.tournament-date').val());
+    var title = $(".video-title").val().trim();
+    var split_title = title.split("-");
+    var tournament_name = split_title[0].trim();
+    var everything_else = split_title.slice(1, 12).join("");
+    var match_type = everything_else.split(":")[0].trim();
+    var chars_string = everything_else.split(":")[1].trim();
+    console.log(chars_string);
+    var arr = chars_string.match(/^(.+)\((.+)\) vs\.? (.+)\((.+)\)$/);
+    var player1_name = arr[1].trim();
+    var player1_char = arr[2].trim().split("/")[0].trim().replace(/\W/g, '').toLowerCase();
+    var player2_name = arr[3].trim();
+    var player2_char = arr[4].trim().split("/")[0].trim().replace(/\W/g, '').toLowerCase();
+    console.log(player1_char);
+    console.log(player1_name);
+    console.log(player2_char);
+    console.log(player2_name);
+    render(ReverseCharacterDict[player1_char], player1_name, ReverseCharacterDict[player2_char], player2_name, match_type, tournament_name, '');
 }
 
 String.prototype.format = function() {
@@ -122,7 +139,7 @@ function reRender(event) {
         CharacterDict[$(".player1-character").val()],
         $(".player2-name").val(),
         CharacterDict[$(".player2-character").val()]);
-    $(".video-title").val(title);
+    //$(".video-title").val(title);
     return false;
 }
 
@@ -153,12 +170,13 @@ if (Meteor.isClient) {
 
 
 Template.Home.events({
-    "change .player1-character": reRender,
-    "change .player2-character": reRender,
-    "change .player1-name": reRender,
-    "change .player2-name": reRender,
-    "change .match-type": reRender,
-    "change .tournament-name": reRender
+    //"change .player1-character": reRender,
+    //"change .player2-character": reRender,
+    //"change .player1-name": reRender,
+    //"change .player2-name": reRender,
+    //"change .match-type": reRender,
+    //"change .tournament-name": reRender,
+    "change .video-title": reRender
 });
 
 Meteor.startup(function() {

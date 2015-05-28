@@ -12,33 +12,34 @@ template(name='Home')
                 .col-md-12
                     b Title
                     input.form-control.video-title(type='text', value='YOUTUBE VIDEO TITLE')
-                .col-md-8
-                    canvas#thumbnail(width='800', height='600', style='border:1px solid #000000;')
-                        | Your browser does not support the HTML5 canvas tag.
-                .col-md-4
-                    .input-group
-                        input.form-control.tournament-name(type='text', value='Tournament Name', aria-describedby='player1_name', maxlength='20')
-                    //.input-group.datetimepicker
-                    //    input.set-due-date.form-control.tournament-date(type='text', maxlength='10')
-                    //    span.input-group-addon
-                    //        span.glyphicon.glyphicon-calendar
-                    .input-group.p1-group
-                        input.form-control.player1-name(type='text', value='P1 Name', aria-describedby='player1_name', maxlength='20')
-                        select.form-control.player1-character
-                            each characters
-                                option(value=id) {{ name }}
-                    .input-group.p2-group
-                        input.form-control.player2-name(type='text', value='P2 Name', aria-describedby='player2_name', maxlength='20')
-                        select.form-control.player2-character
-                            each characters
-                                option(value=id) {{ name }}
-                    select.form-control.match-type
-                        each match_types
-                            option(value=name) {{ name }}
                 .col-md-12
-                    div {{> upload_bootstrap }}
+                    div.upload-bar {{> upload_bootstrap }}
                     each uploads
                         div {{> Upload }}
+                .col-md-12
+                    canvas#thumbnail(width='800', height='600', style='border:1px solid #000000;')
+                        | Your browser does not support the HTML5 canvas tag.
+                //.col-md-4
+                //    .input-group
+                //        input.form-control.tournament-name(type='text', value='Tournament Name', aria-describedby='player1_name', maxlength='20')
+                //    //.input-group.datetimepicker
+                //    //    input.set-due-date.form-control.tournament-date(type='text', maxlength='10')
+                //    //    span.input-group-addon
+                //    //        span.glyphicon.glyphicon-calendar
+                //    .input-group.p1-group
+                //        input.form-control.player1-name(type='text', value='P1 Name', aria-describedby='player1_name', maxlength='20')
+                //        select.form-control.player1-character
+                //            each characters
+                //                option(value=id) {{ name }}
+                //    .input-group.p2-group
+                //        input.form-control.player2-name(type='text', value='P2 Name', aria-describedby='player2_name', maxlength='20')
+                //        select.form-control.player2-character
+                //            each characters
+                //                option(value=id) {{ name }}
+                //    select.form-control.match-type
+                //        each match_types
+                //            option(value=name) {{ name }}
+
         else
             h4.sign-in-notice Sign in with your YouTube account to begin!
 
