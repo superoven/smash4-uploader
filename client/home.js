@@ -22,46 +22,47 @@ function make_char_url(char_id) {
 
 function render(player1_id, player1_name, player2_id, player2_name, match_type, tournament_name, tournament_date) {
     images = {
-        'bg': '/img/bg.png',
+        'bg': '/img/bg_default.png',
         'player1': make_char_url(player1_id),
         'player2': make_char_url(player2_id),
-        'overlay': '/img/overlay.png'
+        'overlay': '/img/overlay_default.png'
     };
     function character_render(ctx, character, player_slot_num) {
         var is_player1 = (player_slot_num == 1);
         var query = is_player1 ? 'flipLeft' : 'flipRight';
         var player_id = (is_player1) ? player1_id : player2_id;
-        var portrait_y_axis = 100;
+        var portrait_y_axis = 0;
+        var resize_size = 308;
 
         var should_flip = PortraitOrientations[player_id][query];
         if (should_flip && !is_player1) {
-            ctx.translate(800, 0);
+            ctx.translate(640, 0);
             ctx.scale(-1, 1);
-            ctx.drawImage(character, 0, portrait_y_axis);
-            ctx.translate(800, 0);
+            ctx.drawImage(character, 0, portrait_y_axis, resize_size, resize_size);
+            ctx.translate(640, 0);
             ctx.scale(-1, 1);
         }
         else if (should_flip && is_player1) {
             ctx.scale(-1, 1);
-            ctx.translate(-400, 0);
-            ctx.drawImage(character, 0, portrait_y_axis);
+            ctx.translate(-320, 0);
+            ctx.drawImage(character, 0, portrait_y_axis, resize_size, resize_size);
             ctx.scale(-1, 1);
-            ctx.translate(-400, 0);
+            ctx.translate(-320, 0);
         }
         else if (!should_flip && is_player1) {
-            ctx.drawImage(character, 0, portrait_y_axis);
+            ctx.drawImage(character, 0, portrait_y_axis, resize_size, resize_size);
         }
         else if (!should_flip && !is_player1) {
-            ctx.translate(400, 0);
-            ctx.drawImage(character, 0, portrait_y_axis);
-            ctx.translate(-400, 0);
+            ctx.translate(360, 0);
+            ctx.drawImage(character, 0, portrait_y_axis, resize_size, resize_size);
+            ctx.translate(-360, 0);
         }
     }
     loadImages(images, function (res) {
-        var top_text_y_axis = 140;
-        var tournament_text_box_y_axis = 475;
-        var bottom_text_y_axis = 515;
-        var width_of_text_box = 360;
+        var top_text_y_axis = 60;
+        var tournament_text_box_y_axis = 300;
+        var bottom_text_y_axis = 350;
+        var width_of_text_box = 280;
         var width_of_tournament_text_box = 400;
 
         var c = $("#thumbnail")[0];
@@ -81,20 +82,20 @@ function render(player1_id, player1_name, player2_id, player2_name, match_type, 
         ctx.fillText(player1_name, 0, top_text_y_axis, width_of_text_box);
         ctx.strokeText(player1_name, 0, top_text_y_axis, width_of_text_box);
         ctx.textAlign="end";
-        ctx.fillText(player2_name, 800, top_text_y_axis, width_of_text_box);
-        ctx.strokeText(player2_name, 800, top_text_y_axis, width_of_text_box);
+        ctx.fillText(player2_name, 640, top_text_y_axis, width_of_text_box);
+        ctx.strokeText(player2_name, 640, top_text_y_axis, width_of_text_box);
 
         ctx.textAlign="start";
         ctx.font = "normal bolder 40px sans-serif";
         ctx.fillText(match_type, 0, bottom_text_y_axis, width_of_text_box);
         ctx.strokeText(match_type, 0, bottom_text_y_axis, width_of_text_box);
         ctx.textAlign="end";
-        ctx.fillText(tournament_date, 800, bottom_text_y_axis, width_of_text_box);
-        ctx.strokeText(tournament_date, 800, bottom_text_y_axis, width_of_text_box);
+        ctx.fillText(tournament_date, 640, bottom_text_y_axis, width_of_text_box);
+        ctx.strokeText(tournament_date, 640, bottom_text_y_axis, width_of_text_box);
         ctx.textAlign="center";
         ctx.font = "normal bolder 80px sans-serif";
-        ctx.fillText(tournament_name, 400, tournament_text_box_y_axis, width_of_tournament_text_box);
-        ctx.strokeText(tournament_name, 400, tournament_text_box_y_axis, width_of_tournament_text_box);
+        ctx.fillText(tournament_name, 320, tournament_text_box_y_axis, width_of_tournament_text_box);
+        ctx.strokeText(tournament_name, 320, tournament_text_box_y_axis, width_of_tournament_text_box);
     });
 }
 
