@@ -115,6 +115,9 @@ if (Meteor.isClient) {
         },
         match_types: function () {
             return MatchTypes;
+        },
+        image_sets: function () {
+            return ImageSet.find({});
         }
     });
 
@@ -124,7 +127,9 @@ if (Meteor.isClient) {
             this.$('.datetimepicker').datetimepicker({
                 format: 'MM/DD/YYYY'
             });
-            this.$(".datetimepicker").on("dp.change", function (e) { doRender(); });
+            this.$(".datetimepicker").on("dp.change", function (e) {
+                doRender();
+            });
             doRender();
         }
     };
@@ -138,7 +143,22 @@ Template.Home.events({
     "change .match-type": reRender,
     "change .tournament-name": reRender,
     "click .bruh": function (event) {
-        var c = $("#thumbnail")[0];
-        Meteor.call("thumbnailUpload", 'E9QGgOqMBGo', c.toDataURL());
+        async.parallel(
+            _.reduce(['background', 'overlay'], function(acc, name) {
+                acc[name] = function (callback) {
+                    var fr = new FileReader();
+                    fr.onload = function (event) { callback(null, fr.result); };
+                    fr.readAsDataURL($(".file-upload-" + name).prop('files')[0]);
+                };
+                return acc;
+            }, {}),
+            function (err, results) {
+                if (!err) {
+                    Meteor.call("uploadImages", results['background'], results['overlay']);
+                } else {
+                    console.error("Failed to uploadImages - " + err);
+                }
+            }
+        );
     }
 });

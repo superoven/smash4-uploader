@@ -6,6 +6,10 @@ template(name='Home')
         .navbar.navbar-default.navbar-static-top(role='navigation')
             .container-fluid
                 .navbar-brand(href="/") Smash Tournament Thumbnail Generator
+                .navbar-right.login {{> loginButtons}}
+        input.form-control.file-upload-background(type='file')
+        input.form-control.file-upload-overlay(type='file')
+        button.bruh Press for Upload
         canvas#thumbnail(width='640', height='360', style='border:1px solid #000000;')
             | Your browser does not support the HTML5 canvas tag.
         .col-md-4

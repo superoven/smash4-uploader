@@ -41,3 +41,5 @@ check
 
 
 npm-container
+cosmos:browserify
+react

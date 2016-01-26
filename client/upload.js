@@ -1,5 +1,5 @@
-Template.Upload.helpers({
-    uploadProgresses: function () {
-        return UploadProgress.find({});
+Template.Home.helpers({
+    allUserImageSets: function () {
+        return ImageSet.find({});
     }
 });
