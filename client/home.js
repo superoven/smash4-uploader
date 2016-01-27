@@ -17,6 +17,12 @@ Template.Home.events({
     "change .player2-name": render,
     "change .match-type": render,
     "change .tournament-name": render,
+    "change .file-upload-background": function (event) {
+        $('.btn-file-display-background').val(event.target.files[0].name);
+    },
+    "change .file-upload-overlay": function (event) {
+        $('.btn-file-display-overlay').val(event.target.files[0].name);
+    },
     "click .upload-imageset": function (event) {
         if (!Meteor.user()) { return; }
         async.parallel(

@@ -22,6 +22,7 @@ body {
     margin: 0 auto;
     min-height: 100%;
     background: white;
+    padding-bottom: 150px;
 }
 
 header {
@@ -163,4 +164,9 @@ input[readonly] {
 
 #imageset-thumbnail {
     float: right
+}
+
+.btn-file-display-background, .btn-file-display-overlay {
+    overflow: hidden;
+    text-overflow: ellipsis;
 }

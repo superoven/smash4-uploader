@@ -7,32 +7,24 @@ template(name='Home')
             .container-fluid
                 .navbar-brand(href="/") Smash Tournament Thumbnail Generator
                 .navbar-right.login {{> loginButtons}}
-        .col-md-6
+        .col-md-8.col-md-offset-2
             .panel.panel-default
                 .panel-heading Add Custom Template
                 .panel-body
                     .input-group
                         input.form-control.file-upload-name(type='text', placeholder="Template Name", maxlength='18')
                         .input-group-btn
-                            button.btn.btn-default.upload-imageset(type='button') Go!
+                            button.btn.btn-default.upload-imageset(type='button') Upload Template
                     .input-group
                         span.input-group-btn
                             span.btn.btn-primary.btn-file Add Background…
                                 input.file-upload-background(type='file', multiple='')
-                        input.form-control.btn-file-display(type='text', readonly='')
+                        input.form-control.btn-file-display-background(type='text', readonly='')
                     .input-group
                         span.input-group-btn
                             span.btn.btn-primary.btn-file Add Overlay…
                                 input.file-upload-overlay(type='file', multiple='')
-                        input.form-control.btn-file-display(type='text', readonly='')
-        .col-md-6
-            .btn-group
-                button.btn.btn-default.btn-lg.dropdown-toggle.template-select-button(type='button', data-toggle='dropdown', aria-haspopup='true', aria-expanded='false')
-                    | Select Template
-                    span.caret
-                ul.dropdown-menu
-                    each image_sets
-                        +ImageSet
+                        input.form-control.btn-file-display-overlay(type='text', readonly='')
         canvas#thumbnail(width='640', height='360', style='border:1px solid #000000;')
             | Your browser does not support the HTML5 canvas tag.
         .col-md-4
@@ -44,9 +36,16 @@ template(name='Home')
             select.form-control.match-type
                 each match_types
                     option(value=name) {{ name }}
+        .col-md-4
+            .btn-group
+                button.btn.btn-default.dropdown-toggle.template-select-button(type='button', data-toggle='dropdown', aria-haspopup='true', aria-expanded='false')
+                    | Select Template
+                    span.caret
+                ul.dropdown-menu
+                    each image_sets
+                        +ImageSet
             input-group
                 input.form-control.tournament-name(type='text', value='Tournament Name', maxlength='25')
-        .col-md-4
         .col-md-4
             .input-group
                 input.form-control.player2-name(type='text', value='P2 Name', aria-describedby='player2_name', maxlength='18')
