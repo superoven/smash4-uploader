@@ -83,10 +83,11 @@ Meteor.methods({
             console.log(err);
         });
     },
-    uploadImages: function (background, overlay) {
+    uploadImages: function (name, background, overlay) {
         if (!Meteor.userId()) { throw new Meteor.Error("not-authorized"); }
         ImageSet.insert({
             userId: Meteor.userId(),
+            name: name,
             background: background,
             overlay: overlay
         });

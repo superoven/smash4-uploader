@@ -7,9 +7,32 @@ template(name='Home')
             .container-fluid
                 .navbar-brand(href="/") Smash Tournament Thumbnail Generator
                 .navbar-right.login {{> loginButtons}}
-        input.form-control.file-upload-background(type='file')
-        input.form-control.file-upload-overlay(type='file')
-        button.bruh Press for Upload
+        .col-md-6
+            .panel.panel-default
+                .panel-heading Add Custom Template
+                .panel-body
+                    .input-group
+                        input.form-control.file-upload-name(type='text', placeholder="Template Name", maxlength='18')
+                        .input-group-btn
+                            button.btn.btn-default.upload-imageset(type='button') Go!
+                    .input-group
+                        span.input-group-btn
+                            span.btn.btn-primary.btn-file Add Background…
+                                input.file-upload-background(type='file', multiple='')
+                        input.form-control.btn-file-display(type='text', readonly='')
+                    .input-group
+                        span.input-group-btn
+                            span.btn.btn-primary.btn-file Add Overlay…
+                                input.file-upload-overlay(type='file', multiple='')
+                        input.form-control.btn-file-display(type='text', readonly='')
+        .col-md-6
+            .btn-group
+                button.btn.btn-default.btn-lg.dropdown-toggle.template-select-button(type='button', data-toggle='dropdown', aria-haspopup='true', aria-expanded='false')
+                    | Select Template
+                    span.caret
+                ul.dropdown-menu
+                    each image_sets
+                        +ImageSet
         canvas#thumbnail(width='640', height='360', style='border:1px solid #000000;')
             | Your browser does not support the HTML5 canvas tag.
         .col-md-4
@@ -22,7 +45,7 @@ template(name='Home')
                 each match_types
                     option(value=name) {{ name }}
             input-group
-                input.form-control.tournament-name(type='text', value='Tournament Name', aria-describedby='player1_name', maxlength='25')
+                input.form-control.tournament-name(type='text', value='Tournament Name', maxlength='25')
         .col-md-4
         .col-md-4
             .input-group
@@ -35,6 +58,13 @@ template(name='Home')
                 span.input-group-addon
                     span.glyphicon.glyphicon-calendar
 
+template(name='ImageSet')
+    li
+        canvas#imageset-thumbnail(width='60', height='33', style='border:1px solid #000000;')
+            | Your browser does not support the HTML5 canvas tag.
+        .imageset-text {{name}}
+
+
 template(name='Upload')
     .container
         .navbar.navbar-default.navbar-static-top(role='navigation')
@@ -45,19 +75,3 @@ template(name='Upload')
             p {{title}}
             .progress
                 .progress-bar.active.progress-bar-striped(role='progressbar', aria-valuenow='{{progress}}', aria-valuemin='0', aria-valuemax='100', style='min-width: 2em; width: {{progress}}%;') {{progress}}%
-        //button.bruh Press for Youtube
-        //canvas#thumbnail(width='800', height='600', style='border:1px solid #000000;')
-        //    | Your browser does not support the HTML5 canvas tag.
-        //.col-md-4
-        //    .input-group
-        //        input.form-control.player1-name(type='text', value='P1 Name', aria-describedby='player1_name', maxlength='20')
-        //    select.form-control.player1-character
-        //        each characters
-        //            option(value=id) {{ name }}
-        //.col-md-4
-        //.col-md-4
-        //    .input-group
-        //        input.form-control.player2-name(type='text', value='P2 Name', aria-describedby='player2_name', maxlength='20')
-        //    select.form-control.player2-character
-        //        each characters
-        //            option(value=id) {{ name }}

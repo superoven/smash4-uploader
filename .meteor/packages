@@ -13,7 +13,6 @@ accounts-password
 fastclick
 mrt:external-file-loader
 jquery
-twbs:bootstrap
 meteorhacks:npm
 
 
