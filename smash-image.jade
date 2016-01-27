@@ -7,61 +7,90 @@ template(name='Home')
             .container-fluid
                 .navbar-brand(href="/") Smash Tournament Thumbnail Generator
                 .navbar-right.login {{> loginButtons}}
-        .col-md-8.col-md-offset-2
+        .col-md-8
             .panel.panel-default
                 .panel-heading Add Custom Template
                 .panel-body
-                    .input-group
-                        input.form-control.file-upload-name(type='text', placeholder="Template Name", maxlength='18')
-                        .input-group-btn
-                            button.btn.btn-default.upload-imageset(type='button') Upload Template
-                    .input-group
-                        span.input-group-btn
-                            span.btn.btn-primary.btn-file Add Background…
-                                input.file-upload-background(type='file', multiple='')
-                        input.form-control.btn-file-display-background(type='text', readonly='')
-                    .input-group
-                        span.input-group-btn
-                            span.btn.btn-primary.btn-file Add Overlay…
-                                input.file-upload-overlay(type='file', multiple='')
-                        input.form-control.btn-file-display-overlay(type='text', readonly='')
+                    .form-group
+                        label(for='pwd') Name:
+                        .input-group#pwd
+                            input.form-control.file-upload-name(type='text', placeholder="Template Name", maxlength='20')
+                            .input-group-btn
+                                button.btn.btn-primary.upload-imageset(type='button') Upload Template
+                    .form-group
+                        label(for='bg') Background:
+                        .input-group#bg
+                            span.input-group-btn
+                                span.btn.btn-primary.btn-file Browse…
+                                    input.file-upload-background(type='file', multiple='')
+                            input.form-control.btn-file-display-background(type='text', readonly='')
+                    .form-group
+                        label(for='overlay') Overlay:
+                        .input-group#overlay
+                            span.input-group-btn
+                                span.btn.btn-primary.btn-file Browse…
+                                    input.file-upload-overlay(type='file', multiple='')
+                            input.form-control.btn-file-display-overlay(type='text', readonly='')
+        .col-md-4
+            .form-group
+                label(for='template-select-button') Template:
+                .btn-group
+                    button.btn.btn-default.dropdown-toggle.template-select-button(type='button', data-toggle='dropdown', aria-haspopup='true', aria-expanded='false')
+                        | Select Template
+                        span.caret
+                    ul.dropdown-menu
+                        each image_sets
+                            +ImageSet
         canvas#thumbnail(width='640', height='360', style='border:1px solid #000000;')
             | Your browser does not support the HTML5 canvas tag.
-        .col-md-4
-            .input-group
-                input.form-control.player1-name(type='text', value='P1 Name', aria-describedby='player1_name', maxlength='18')
-            select.form-control.player1-character
-                each characters
-                    option(value=id) {{ name }}
-            select.form-control.match-type
-                each match_types
-                    option(value=name) {{ name }}
-        .col-md-4
-            .btn-group
-                button.btn.btn-default.dropdown-toggle.template-select-button(type='button', data-toggle='dropdown', aria-haspopup='true', aria-expanded='false')
-                    | Select Template
-                    span.caret
-                ul.dropdown-menu
-                    each image_sets
-                        +ImageSet
-            input-group
-                input.form-control.tournament-name(type='text', value='Tournament Name', maxlength='25')
-        .col-md-4
-            .input-group
-                input.form-control.player2-name(type='text', value='P2 Name', aria-describedby='player2_name', maxlength='18')
-            select.form-control.player2-character
-                each characters
-                    option(value=id) {{ name }}
-            .input-group.datetimepicker
-                input.set-due-date.form-control.tournament-date(type='text')
-                span.input-group-addon
-                    span.glyphicon.glyphicon-calendar
+        .panel.panel-default
+            .panel-heading Thumbnail Parameters
+            .panel-body
+                .col-md-4
+                    .form-group
+                        label(for='player1-name') Name:
+                        .input-group
+                            input.form-control.player1-name(type='text', value='P1 Name', aria-describedby='player1_name', maxlength='18')
+                    .form-group
+                        label(for='player1-character') Character:
+                        select.form-control.player1-character
+                            each characters
+                                option(value=id) {{ name }}
+                    .form-group
+                        label(for='match-type') Match Type:
+                        select.form-control.match-type
+                            each match_types
+                                option(value=name) {{ name }}
+                .col-md-4
+                    .form-group
+                        label(for='tournament-name') Tournament Name:
+                        input-group
+                            input.form-control.tournament-name(type='text', value='Tournament Name', maxlength='25')
+                .col-md-4
+                    .form-group
+                        label(for='player2-name') Name:
+                        .input-group
+                            input.form-control.player2-name(type='text', value='P2 Name', aria-describedby='player2_name', maxlength='18')
+                    .form-group
+                        label(for='player2-character') Character:
+                        select.form-control.player2-character
+                            each characters
+                                option(value=id) {{ name }}
+                    .form-group
+                        label(for='tournament-date') Date:
+                        .input-group.datetimepicker
+                            input.set-due-date.form-control.tournament-date(type='text')
+                            span.input-group-addon
+                                span.glyphicon.glyphicon-calendar
 
 template(name='ImageSet')
     li
-        canvas#imageset-thumbnail(width='60', height='33', style='border:1px solid #000000;')
-            | Your browser does not support the HTML5 canvas tag.
-        .imageset-text {{name}}
+        .rTable
+            .rTableRow
+                .rTableCell
+                    canvas#imageset-thumbnail(width='36', height='20', style='border:1px solid #000000;')
+                .rTableCell
+                    .imageset-text {{name}}
 
 
 template(name='Upload')

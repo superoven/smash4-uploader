@@ -162,11 +162,24 @@ input[readonly] {
   cursor: text !important;
 }
 
-#imageset-thumbnail {
-    float: right
-}
-
 .btn-file-display-background, .btn-file-display-overlay {
     overflow: hidden;
     text-overflow: ellipsis;
 }
+
+.dropdown-menu {
+    width: 200px !important;
+}
+
+.rTable { display: table; }
+.rTableRow { display: table-row; }
+.rTableHeading { display: table-header-group; }
+.rTableBody { display: table-row-group; }
+.rTableFoot { display: table-footer-group; }
+.rTableCell, .rTableHead {
+    display: table-cell;
+    padding-right: 5px;
+}
+
+.popup { z-index : 900; }
+.ui-datepicker-div { z-index: 999; }
