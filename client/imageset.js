@@ -1,7 +1,8 @@
 Template.ImageSet.rendered = function () {
     if (!this._rendered) {
         this._rendered = true;
-        var c = this.find("#imageset-thumbnail");
+        var c = this.find("[imageset-thumbnail]");
+        if (!c) { return; }
         var ctx = c.getContext("2d");
         var self = this;
         async.parallel(
@@ -28,7 +29,17 @@ Template.ImageSet.rendered = function () {
 };
 
 Template.ImageSet.events({
-    "click": function (event) {
+    "click .remove-button": function (event) {
+        event.preventDefault();
+        event.stopImmediatePropagation();
+        if (Session.get("selectedImageSet") == this._id) {
+            Session.set("selectedImageSet", null);
+            render();
+        }
+        Meteor.call("removeImageSet", this._id);
+    },
+    "click .imageset-choice": function (event) {
+        event.preventDefault();
         Session.set("selectedImageSet", this._id);
         render();
     }

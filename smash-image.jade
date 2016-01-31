@@ -14,18 +14,20 @@ template(name='Home')
                     .form-group
                         label(for='pwd') Name:
                         .input-group#pwd
-                            input.form-control.file-upload-name(type='text', placeholder="Template Name", maxlength='20')
+                            input.form-control.file-upload-name(type='text', placeholder="Template Name", maxlength='16')
                             .input-group-btn
                                 button.btn.btn-primary.upload-imageset(type='button') Upload Template
                     .form-group
-                        label(for='bg') Background:
+                        label(for='bg') Background (640x360 png):
+                            a(href="/img/bg_default.png", target="_blank") Sample Background
                         .input-group#bg
                             span.input-group-btn
                                 span.btn.btn-primary.btn-file Browse…
                                     input.file-upload-background(type='file', multiple='')
                             input.form-control.btn-file-display-background(type='text', readonly='')
                     .form-group
-                        label(for='overlay') Overlay:
+                        label(for='overlay') Overlay (640x360 png):
+                            a(href="/img/overlay_default.png", target="_blank") Sample Overlay
                         .input-group#overlay
                             span.input-group-btn
                                 span.btn.btn-primary.btn-file Browse…
@@ -33,7 +35,6 @@ template(name='Home')
                             input.form-control.btn-file-display-overlay(type='text', readonly='')
         .col-md-4
             .form-group
-                label(for='template-select-button') Template:
                 .btn-group
                     button.btn.btn-default.dropdown-toggle.template-select-button(type='button', data-toggle='dropdown', aria-haspopup='true', aria-expanded='false')
                         | Select Template
@@ -43,8 +44,7 @@ template(name='Home')
                             +ImageSet
         canvas#thumbnail(width='640', height='360', style='border:1px solid #000000;')
             | Your browser does not support the HTML5 canvas tag.
-        .panel.panel-default
-            .panel-heading Thumbnail Parameters
+        .panel.panel-default.thumbnail-params
             .panel-body
                 .col-md-4
                     .form-group
@@ -82,15 +82,45 @@ template(name='Home')
                             input.set-due-date.form-control.tournament-date(type='text')
                             span.input-group-addon
                                 span.glyphicon.glyphicon-calendar
+    div {{> errorModal }}
+    div {{> successModal }}
 
 template(name='ImageSet')
-    li
-        .rTable
-            .rTableRow
-                .rTableCell
-                    canvas#imageset-thumbnail(width='36', height='20', style='border:1px solid #000000;')
-                .rTableCell
-                    .imageset-text {{name}}
+    li.imageset-choice
+        .container-fluid
+            canvas.navbar-left(width='36', height='20', style='border:1px solid #000000;', imageset-thumbnail="true")
+            .navbar-right.imageset-text {{name}}
+                span.glyphicon.glyphicon-remove.remove-button(aria-hidden='true')
+        //.rTable
+        //    .rTableRow
+        //        .rTableCell
+        //
+        //        .rTableCell
+        //            .imageset-text {{name}}
+        //        .rTableCell
+
+
+template(name='errorModal')
+    #errorModal.modal.fade
+        .modal-dialog.modal-sm
+            .modal-content
+                .modal-header-danger
+                    .container-fluid
+                        h4.navbar-left.modal-title.error-modal-title Error
+                        span.navbar-right.glyphicon.glyphicon-remove.remove-button(aria-hidden='true', data-dismiss='modal')
+                .modal-body
+                    .error-text This is an error
+
+template(name='successModal')
+    #successModal.modal.fade
+        .modal-dialog.modal-sm
+            .modal-content
+                .modal-header-success
+                    .container-fluid
+                        h4.navbar-left.modal-title.success-modal-title Success!
+                        span.navbar-right.glyphicon.glyphicon-remove.remove-button(aria-hidden='true', data-dismiss='modal')
+                .modal-body
+                    .success-text Successfully Uploaded!
 
 
 template(name='Upload')

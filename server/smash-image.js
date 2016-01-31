@@ -85,11 +85,22 @@ Meteor.methods({
     },
     uploadImages: function (name, background, overlay) {
         if (!Meteor.userId()) { throw new Meteor.Error("not-authorized"); }
+        var max_templates = 5;
+        if (ImageSet.find({userId: Meteor.userId()}).count() >= max_templates) {
+            throw new Meteor.Error("Sorry, you cannot upload more than " + max_templates + " templates");
+        }
         ImageSet.insert({
             userId: Meteor.userId(),
             name: name,
             background: background,
             overlay: overlay
+        });
+    },
+    removeImageSet: function (id) {
+        if (!Meteor.userId()) { throw new Meteor.Error("not-authorized"); }
+        ImageSet.remove({
+            userId: Meteor.userId(),
+            _id: id
         });
     }
 });
