@@ -18,7 +18,6 @@ meteorhacks:npm
 nimble:restivus
 iron:router
 accounts-base
-accounts-google
 service-configuration
 tsega:bootstrap3-datetimepicker
 
