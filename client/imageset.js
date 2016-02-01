@@ -50,3 +50,12 @@ Template.ImageSet.helpers({
         return Session.get("selectedImageSet") == this._id;
     }
 });
+
+Template.ImageSetContainer.helpers({
+    image_sets: function () {
+        return ImageSet.find({userId: Meteor.userId()});
+    },
+    image_sets_exists: function () {
+        return ImageSet.find({userId: Meteor.userId()}).count();
+    }
+});

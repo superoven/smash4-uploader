@@ -5,43 +5,16 @@ template(name='Home')
     .container
         .navbar.navbar-default.navbar-static-top(role='navigation')
             .container-fluid
-                .navbar-brand(href="/") Smash Tournament Thumbnail Generator
+                .navbar-brand(href="/") Smash Tournament Thumbnail Generator v1.0
                 .navbar-right.login {{> loginButtons}}
-        .col-md-8
-            .panel.panel-default
-                .panel-heading Add Custom Template
-                .panel-body
-                    .form-group
-                        label(for='pwd') Name:
-                        .input-group#pwd
-                            input.form-control.file-upload-name(type='text', placeholder="Template Name", maxlength='16')
-                            .input-group-btn
-                                button.btn.btn-primary.upload-imageset(type='button') Upload Template
-                    .form-group
-                        label(for='bg') Background (640x360 png):
-                            a(href="/img/bg_default.png", target="_blank") Sample Background
-                        .input-group#bg
-                            span.input-group-btn
-                                span.btn.btn-primary.btn-file Browse…
-                                    input.file-upload-background(type='file', multiple='')
-                            input.form-control.btn-file-display-background(type='text', readonly='')
-                    .form-group
-                        label(for='overlay') Overlay (640x360 png):
-                            a(href="/img/overlay_default.png", target="_blank") Sample Overlay
-                        .input-group#overlay
-                            span.input-group-btn
-                                span.btn.btn-primary.btn-file Browse…
-                                    input.file-upload-overlay(type='file', multiple='')
-                            input.form-control.btn-file-display-overlay(type='text', readonly='')
-        .col-md-4
-            .form-group
-                .btn-group
-                    button.btn.btn-default.dropdown-toggle.template-select-button(type='button', data-toggle='dropdown', aria-haspopup='true', aria-expanded='false')
-                        | Select Template
-                        span.caret
-                    ul.dropdown-menu
-                        each image_sets
-                            +ImageSet
+        if loggedIn
+            .template-container {{> ImageSetContainer }}
+        else
+            .login-notification
+                .panel.panel-primary
+                    .panel-heading Notice:
+                    .panel-body
+                        .notice-text If you sign in, you can add your own backgrounds and overlays to customize your thumbnails!
         canvas#thumbnail(width='640', height='360', style='border:1px solid #000000;')
             | Your browser does not support the HTML5 canvas tag.
         .panel.panel-default.thumbnail-params
@@ -82,8 +55,49 @@ template(name='Home')
                             input.set-due-date.form-control.tournament-date(type='text')
                             span.input-group-addon
                                 span.glyphicon.glyphicon-calendar
-    div {{> errorModal }}
-    div {{> successModal }}
+    div {{> ErrorModal }}
+    div {{> SuccessModal }}
+
+template(name="ImageSetContainer")
+    .col-md-8
+        .panel.panel-default
+            .panel-heading Add Custom Template
+            .panel-body
+                .form-group
+                    label(for='pwd') Name:
+                    .input-group#pwd
+                        input.form-control.file-upload-name(type='text', placeholder="Template Name", maxlength='16')
+                        .input-group-btn
+                            button.btn.btn-primary.upload-imageset(type='button') Upload Template
+                .form-group
+                    label(for='bg') Background (640x360 png):
+                        a(href="/img/bg_default.png", target="_blank") Sample Background
+                    .input-group#bg
+                        span.input-group-btn
+                            span.btn.btn-primary.btn-file Browse…
+                                input.file-upload-background(type='file', multiple='')
+                        input.form-control.btn-file-display-background(type='text', readonly='')
+                .form-group
+                    label(for='overlay') Overlay (640x360 png):
+                        a(href="/img/overlay_default.png", target="_blank") Sample Overlay
+                    .input-group#overlay
+                        span.input-group-btn
+                            span.btn.btn-primary.btn-file Browse…
+                                input.file-upload-overlay(type='file', multiple='')
+                        input.form-control.btn-file-display-overlay(type='text', readonly='')
+    .col-md-4
+        .form-group
+            .btn-group
+                button.btn.btn-default.dropdown-toggle.template-select-button(type='button', data-toggle='dropdown', aria-haspopup='true', aria-expanded='false')
+                    | Select Template
+                    span.caret
+                ul.dropdown-menu
+                    if image_sets_exists
+                        each image_sets
+                            +ImageSet
+                    else
+                        li No templates! Add one in the pane to the left
+
 
 template(name='ImageSet')
     li.imageset-choice
@@ -91,16 +105,8 @@ template(name='ImageSet')
             canvas.navbar-left(width='36', height='20', style='border:1px solid #000000;', imageset-thumbnail="true")
             .navbar-right.imageset-text {{name}}
                 span.glyphicon.glyphicon-remove.remove-button(aria-hidden='true')
-        //.rTable
-        //    .rTableRow
-        //        .rTableCell
-        //
-        //        .rTableCell
-        //            .imageset-text {{name}}
-        //        .rTableCell
 
-
-template(name='errorModal')
+template(name='ErrorModal')
     #errorModal.modal.fade
         .modal-dialog.modal-sm
             .modal-content
@@ -111,7 +117,7 @@ template(name='errorModal')
                 .modal-body
                     .error-text This is an error
 
-template(name='successModal')
+template(name='SuccessModal')
     #successModal.modal.fade
         .modal-dialog.modal-sm
             .modal-content
@@ -121,15 +127,3 @@ template(name='successModal')
                         span.navbar-right.glyphicon.glyphicon-remove.remove-button(aria-hidden='true', data-dismiss='modal')
                 .modal-body
                     .success-text Successfully Uploaded!
-
-
-template(name='Upload')
-    .container
-        .navbar.navbar-default.navbar-static-top(role='navigation')
-            .container-fluid
-                .navbar-brand(href="/") Video Uploading
-                .navbar-right.login {{> loginButtons}}
-        each uploadProgresses
-            p {{title}}
-            .progress
-                .progress-bar.active.progress-bar-striped(role='progressbar', aria-valuenow='{{progress}}', aria-valuemin='0', aria-valuemax='100', style='min-width: 2em; width: {{progress}}%;') {{progress}}%

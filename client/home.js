@@ -5,8 +5,8 @@ Template.Home.helpers({
     match_types: function () {
         return MatchTypes;
     },
-    image_sets: function () {
-        return ImageSet.find({});
+    loggedIn: function () {
+        return Meteor.user();
     }
 });
 
